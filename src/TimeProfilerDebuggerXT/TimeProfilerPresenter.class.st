@@ -14,7 +14,7 @@ Class {
 	#category : #TimeProfilerDebuggerXT
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> createBlockCodeComponent [
 
 	| blockCodePaneMorph |
@@ -29,7 +29,7 @@ TimeProfilerPresenter >> createBlockCodeComponent [
 	blockCode := self specWrapperFor: blockCodePaneMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> createCodeComponent [
 
 	|codePaneMorph|
@@ -43,10 +43,10 @@ TimeProfilerPresenter >> createCodeComponent [
 	code := self specWrapperFor: codePaneMorph
 ]
 
-{ #category : #initialization }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> createComponents [
 
-	profilerMorph := TimeProfilerMorph new model: profiler.
+	profilerMorph := TimeProfilerMorph new model: profiler; yourself.
 
 	self createTreeComponent.
 	self createSummaryComponent.
@@ -55,7 +55,7 @@ TimeProfilerPresenter >> createComponents [
 	self createBlockCodeComponent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> createReportComponent [
 
 	| fullReportMorph |
@@ -68,7 +68,7 @@ TimeProfilerPresenter >> createReportComponent [
 	report := self specWrapperFor: fullReportMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> createSummaryComponent [
 
 	summary := self specWrapperFor: (profilerMorph
@@ -78,7 +78,7 @@ TimeProfilerPresenter >> createSummaryComponent [
 		                getEnabled: nil)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> createTreeComponent [
 	| treeMorph|
 	treeMorph := profiler treeMorph
@@ -88,13 +88,7 @@ TimeProfilerPresenter >> createTreeComponent [
 	tree := self specWrapperFor: (treeMorph).
 ]
 
-{ #category : #layout }
-TimeProfilerPresenter >> defaultLayout [
-
-	^ SpBoxLayout newVertical
-]
-
-{ #category : #initialization }
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> packComponents [
 
 	| treeTabs codeTabs |
@@ -109,11 +103,13 @@ TimeProfilerPresenter >> packComponents [
 		            addPageTitle: 'Statistics' provider: [ summary ];
 		            yourself.
 	
-	self layout add: treeTabs.
-	self layout add: codeTabs
+	self layout: (SpBoxLayout newVertical
+			 add: treeTabs;
+			 add: codeTabs;
+			 yourself)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
 TimeProfilerPresenter >> profiler: aProfiler [
 
 	profiler := aProfiler.
@@ -121,7 +117,13 @@ TimeProfilerPresenter >> profiler: aProfiler [
 	self packComponents.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #api }
+TimeProfilerPresenter >> refresh [
+
+	self profiler: profiler
+]
+
+{ #category : #'private - gui' }
 TimeProfilerPresenter >> specWrapperFor: aMorph [
 	
 	^ self newMorph morph: aMorph; yourself

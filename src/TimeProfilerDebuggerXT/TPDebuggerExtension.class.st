@@ -7,10 +7,37 @@ Class {
 		'button',
 		'profiler',
 		'win',
-		'pane'
+		'pane',
+		'method'
 	],
 	#category : #TimeProfilerDebuggerXT
 }
+
+{ #category : #'as yet unclassified' }
+TPDebuggerExtension >> contextMethodProfile: aContext loops: aIterationNumber [
+
+	profiler runBlock: [
+		aIterationNumber timesRepeat: [ self contextMethodRun: aContext ] 
+	]
+]
+
+{ #category : #'as yet unclassified' }
+TPDebuggerExtension >> contextMethodRun: aContext [
+
+	[ 
+		aContext receiver 
+			perform: aContext method selector 
+			withArguments: aContext arguments 
+	] onErrorDo: [ nil ] 
+
+]
+
+{ #category : #'as yet unclassified' }
+TPDebuggerExtension >> contextMethodString: aContext [
+
+	^ 'Method: #' , aContext method selector , ' with: '
+	  , aContext arguments asOrderedCollection asString 
+]
 
 { #category : #'debugger extension' }
 TPDebuggerExtension >> debuggerExtensionToolName [
@@ -22,6 +49,7 @@ TPDebuggerExtension >> debuggerExtensionToolName [
 TPDebuggerExtension >> debuggerLayout [
 
 	^ SpBoxLayout newVertical
+		add: method;
 		  add: pane;
 		  yourself
 ]
@@ -33,34 +61,20 @@ TPDebuggerExtension >> initializePresenters [
 		            withBlockCodePane: false;
 		            withToolBar: false;
 		            yourself.
+	method := self newLabel.
 	pane := TimeProfilerPresenter new
 		        profiler: profiler;
-		        yourself
-]
-
-{ #category : #'as yet unclassified' }
-TPDebuggerExtension >> performProfileOf: aContext [
-
-	profiler 
-		runBlock: [ 1000 timesRepeat: [ self runContextMethod: aContext ] ] 
-		pollingEvery: MessageTally defaultPollPeriod.
-]
-
-{ #category : #'as yet unclassified' }
-TPDebuggerExtension >> runContextMethod: aContext [
-
-	[ 
-		aContext receiver
-			perform: aContext method selector
-			withArguments: aContext arguments 
-	] 
-	onErrorDo: [ nil ]
+		        yourself.
 ]
 
 { #category : #initialization }
 TPDebuggerExtension >> updatePresenter [
 
-	profiler ifNotNil: [
-		self performProfileOf: debugger context.
-		profiler startState ]
+	| context |
+	context := debugger context.
+
+	self contextMethodProfile: context loops: 100000.
+	method label: (self contextMethodString: context).
+
+	pane refresh
 ]
