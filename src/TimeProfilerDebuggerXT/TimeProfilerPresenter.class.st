@@ -14,6 +14,18 @@ Class {
 	#category : #'TimeProfilerDebuggerXT-TimeProfilerGUI'
 }
 
+{ #category : #accessing }
+TimeProfilerPresenter >> clear [
+
+	| originalProfiler |
+	
+	originalProfiler := profiler.
+	
+	"self profiler: TimeProfiler new
+		withBlockCodePane: false; 
+		yourself."
+]
+
 { #category : #'private - gui' }
 TimeProfilerPresenter >> createBlockCodeComponent [
 
@@ -91,22 +103,29 @@ TimeProfilerPresenter >> createTreeComponent [
 { #category : #'private - gui' }
 TimeProfilerPresenter >> packComponents [
 
-	| treeTabs codeTabs |
-	profiler withBlockCodePane ifTrue: [ panel add: blockCode ].
+	| mainLayout panedLayout |
+	"Creates layouts"
+	mainLayout := SpBoxLayout newVertical.
+	panedLayout := SpPanedLayout newVertical
+		               positionOfSlider: 0.7;
+		               yourself.
 
-	treeTabs := self newNotebook
-		            addPageTitle: 'Tallies Tree' provider: [ tree ];
-		            addPageTitle: 'Full report' provider: [ report ];
-		            yourself.
-	codeTabs := self newNotebook
-		            addPageTitle: 'Code' provider: [ code ];
-		            addPageTitle: 'Statistics' provider: [ summary ];
-		            yourself.
-	
-	self layout: (SpBoxLayout newVertical
-			 add: treeTabs;
-			 add: codeTabs;
-			 yourself)
+	"Composes main layout"
+	profiler withBlockCodePane ifTrue: [ mainLayout add: blockCode ].
+	mainLayout add: panedLayout.
+
+	"Composes paned layout"
+	panedLayout add: (self newNotebook
+			 addPageTitle: 'Tallies Tree' provider: [ tree ];
+			 addPageTitle: 'Full report' provider: [ report ];
+			 yourself).
+	panedLayout add: (self newNotebook
+			 addPageTitle: 'Code' provider: [ code ];
+			 addPageTitle: 'Statistics' provider: [ summary ];
+			 yourself).
+
+	"Update the layout"
+	self layout: mainLayout
 ]
 
 { #category : #api }

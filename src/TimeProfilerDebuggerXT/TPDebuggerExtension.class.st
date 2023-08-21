@@ -16,10 +16,17 @@ TPDebuggerExtension >> connectPresenters [
 
 	toolbarPane onStartDo: [
 		self
-			contextMethod: debugger context
+			contextMethod: debugger selectedContext
 			runProfiler: profiler
-			loops: 10000.
+			loops: toolbarPane iterations.
 		profilerPane refresh ]
+]
+
+{ #category : #'as yet unclassified' }
+TPDebuggerExtension >> contextMethod: aContext runProfiler: aProfiler loops: aIterationNumber [
+
+	aProfiler runBlock: [
+		aIterationNumber timesRepeat: [ self contextMethodRun: aContext ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -34,19 +41,11 @@ TPDebuggerExtension >> contextMethodRun: aContext [
 ]
 
 { #category : #'as yet unclassified' }
-TPDebuggerExtension >> contextMethod: aContext runProfiler: aProfiler loops: aIterationNumber [
-
-	aProfiler runBlock: [
-		aIterationNumber timesRepeat: [ self contextMethodRun: aContext ] ]
-]
-
-{ #category : #'as yet unclassified' }
 TPDebuggerExtension >> contextMethodText: aContext [
 
-	| action args |
-	action := aContext method selector.
-	args := aContext arguments.
-	^ 'Method: ' , action , ' with: ', args asString
+	^ 'On ',  aContext receiver asString
+		, ' executing ', aContext method selector 
+		, ' with arguments ', aContext arguments asString
 ]
 
 { #category : #'debugger extension' }
@@ -59,7 +58,7 @@ TPDebuggerExtension >> debuggerExtensionToolName [
 TPDebuggerExtension >> debuggerLayout [
 
 	^ SpBoxLayout newVertical
-		  add: toolbarPane expand: false;
+		  add: toolbarPane height: 160;
 		  add: profilerPane;
 		  yourself
 ]
@@ -76,7 +75,7 @@ TPDebuggerExtension >> initializePresenters [
 
 	profilerPane := TimeProfilerPresenter new
 		        profiler: profiler;
-		        yourself
+		        yourself.
 ]
 
 { #category : #'as yet unclassified' }
@@ -101,5 +100,9 @@ TPDebuggerExtension >> runContextMethod: aContext [
 { #category : #initialization }
 TPDebuggerExtension >> updatePresenter [
 
-	toolbarPane method: (self contextMethodText: debugger context)
+	debugger selectedContext ifNotNil: [
+		toolbarPane context:
+			(self contextMethodText: debugger selectedContext).
+		profiler reset.
+		profilerPane refresh ]
 ]

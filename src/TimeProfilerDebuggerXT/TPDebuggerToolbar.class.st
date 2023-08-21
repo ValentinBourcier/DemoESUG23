@@ -2,58 +2,63 @@ Class {
 	#name : #TPDebuggerToolbar,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'iterations',
-		'start',
-		'method',
-		'startBlock'
+		'startBlock',
+		'contextLabel',
+		'startButton',
+		'iterationsInput'
 	],
 	#category : #'TimeProfilerDebuggerXT-GUI'
 }
+
+{ #category : #accessing }
+TPDebuggerToolbar >> context: aContextDescription [
+
+	contextLabel text: aContextDescription
+]
 
 { #category : #layout }
 TPDebuggerToolbar >> defaultLayout [
 
 	^ SpBoxLayout newVertical
+		spacing: 5;
+		  add: 'Context' width: 100;
+		  add: contextLabel height: 60;
 		  add: (SpBoxLayout newHorizontal
-				   add: 'Method';
-				   add: method;
+				   add: 'Iterations' width: 100;
+				   add: iterationsInput width: 100;
+				   hAlignStart;
 				   yourself)
 		  height: 24;
-		  add: (SpBoxLayout newHorizontal
-				   add: 'Iterations';
-				   add: iterations width: 100;
-				   yourself)
-		  height: 24;
-		  add: start height: 34;
+		  add: startButton height: 34;
 		  yourself
 ]
 
 { #category : #initialization }
 TPDebuggerToolbar >> initializePresenters [
 
-	method := self newLabel.
+	contextLabel := self newText beNotEditable.
 
-	iterations := self newNumberInput
-		              number: 1000;
-		              minimum: 0;
-		              climbRate: 100;
-		              yourself.
+	iterationsInput := self newNumberInput
+		                   number: 1000;
+		                   minimum: 0;
+		                   climbRate: 100;
+		                   yourself.
 
-	start := self newButton
-		         label: 'Start profiling';
-		         icon: (self iconNamed: #glamorousGo);
-		         action: startBlock;
-		         yourself
+	startButton := self newButton
+		               label: 'Start profiling';
+		               icon: (self iconNamed: #glamorousGo);
+		               action: startBlock;
+		               yourself
 ]
 
 { #category : #accessing }
-TPDebuggerToolbar >> method: aMethodString [
-
-	method label: aMethodString
+TPDebuggerToolbar >> iterations [
+	
+	^ iterationsInput number
 ]
 
 { #category : #enumerating }
 TPDebuggerToolbar >> onStartDo: aBlock [
 
-	start action: aBlock
+	startButton action: aBlock
 ]
