@@ -23,6 +23,17 @@ TPDebuggerExtension >> connectPresenters [
 ]
 
 { #category : #'as yet unclassified' }
+TPDebuggerExtension >> contextMethodRun: aContext [
+
+	[ 
+		aContext receiver 
+			perform: aContext method selector 
+			withArguments: aContext arguments 
+	] onErrorDo: [ nil ] 
+
+]
+
+{ #category : #'as yet unclassified' }
 TPDebuggerExtension >> contextMethod: aContext runProfiler: aProfiler loops: aIterationNumber [
 
 	aProfiler runBlock: [
@@ -51,6 +62,40 @@ TPDebuggerExtension >> debuggerLayout [
 		  add: toolbarPane expand: false;
 		  add: profilerPane;
 		  yourself
+]
+
+{ #category : #'initialization - deprecated' }
+TPDebuggerExtension >> initializePresenters [
+
+	profiler := TimeProfiler new
+		            withBlockCodePane: false;
+		            withToolBar: false;
+		            yourself.
+	
+	toolbarPane := TPDebuggerToolbar new.
+
+	profilerPane := TimeProfilerPresenter new
+		        profiler: profiler;
+		        yourself
+]
+
+{ #category : #'as yet unclassified' }
+TPDebuggerExtension >> performProfileOf: aContext [
+
+	profiler 
+		runBlock: [ 1000 timesRepeat: [ self runContextMethod: aContext ] ] 
+		pollingEvery: MessageTally defaultPollPeriod.
+]
+
+{ #category : #'as yet unclassified' }
+TPDebuggerExtension >> runContextMethod: aContext [
+
+	[ 
+		aContext receiver
+			perform: aContext method selector
+			withArguments: aContext arguments 
+	] 
+	onErrorDo: [ nil ]
 ]
 
 { #category : #initialization }
