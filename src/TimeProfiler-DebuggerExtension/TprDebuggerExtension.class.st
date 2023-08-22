@@ -1,5 +1,5 @@
 Class {
-	#name : #TPDebuggerExtension,
+	#name : #TprDebuggerExtension,
 	#superclass : #SpPresenter,
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
@@ -8,11 +8,11 @@ Class {
 		'profilerPane',
 		'toolbarPane'
 	],
-	#category : #'TimeProfilerDebuggerXT-GUI'
+	#category : #'TimeProfiler-DebuggerExtension-Extension-UI'
 }
 
 { #category : #initialization }
-TPDebuggerExtension >> connectPresenters [
+TprDebuggerExtension >> connectPresenters [
 
 	toolbarPane onStartDo: [
 		self
@@ -23,14 +23,14 @@ TPDebuggerExtension >> connectPresenters [
 ]
 
 { #category : #'as yet unclassified' }
-TPDebuggerExtension >> contextMethod: aContext runProfiler: aProfiler loops: aIterationNumber [
+TprDebuggerExtension >> contextMethod: aContext runProfiler: aProfiler loops: aIterationNumber [
 
 	aProfiler runBlock: [
 		aIterationNumber timesRepeat: [ self contextMethodRun: aContext ] ]
 ]
 
 { #category : #'as yet unclassified' }
-TPDebuggerExtension >> contextMethodRun: aContext [
+TprDebuggerExtension >> contextMethodRun: aContext [
 
 	[ 
 		aContext receiver 
@@ -41,7 +41,7 @@ TPDebuggerExtension >> contextMethodRun: aContext [
 ]
 
 { #category : #'as yet unclassified' }
-TPDebuggerExtension >> contextMethodText: aContext [
+TprDebuggerExtension >> contextMethodText: aContext [
 
 	^ 'On ',  aContext receiver asString
 		, ' executing ', aContext method selector 
@@ -49,13 +49,13 @@ TPDebuggerExtension >> contextMethodText: aContext [
 ]
 
 { #category : #'debugger extension' }
-TPDebuggerExtension >> debuggerExtensionToolName [
+TprDebuggerExtension >> debuggerExtensionToolName [
 
 	^ 'Time profiler' 
 ]
 
 { #category : #layout }
-TPDebuggerExtension >> debuggerLayout [
+TprDebuggerExtension >> debuggerLayout [
 
 	^ SpBoxLayout newVertical
 		  add: toolbarPane height: 160;
@@ -64,22 +64,22 @@ TPDebuggerExtension >> debuggerLayout [
 ]
 
 { #category : #'initialization - deprecated' }
-TPDebuggerExtension >> initializePresenters [
+TprDebuggerExtension >> initializePresenters [
 
 	profiler := TimeProfiler new
 		            withBlockCodePane: false;
 		            withToolBar: false;
 		            yourself.
 	
-	toolbarPane := TPDebuggerToolbar new.
+	toolbarPane := TprDebuggerToolbar new.
 
-	profilerPane := TimeProfilerPresenter new
+	profilerPane := TimeProfilerSpPresenter new
 		        profiler: profiler;
 		        yourself.
 ]
 
 { #category : #'as yet unclassified' }
-TPDebuggerExtension >> performProfileOf: aContext [
+TprDebuggerExtension >> performProfileOf: aContext [
 
 	profiler 
 		runBlock: [ 1000 timesRepeat: [ self runContextMethod: aContext ] ] 
@@ -87,7 +87,7 @@ TPDebuggerExtension >> performProfileOf: aContext [
 ]
 
 { #category : #'as yet unclassified' }
-TPDebuggerExtension >> runContextMethod: aContext [
+TprDebuggerExtension >> runContextMethod: aContext [
 
 	[ 
 		aContext receiver
@@ -98,7 +98,7 @@ TPDebuggerExtension >> runContextMethod: aContext [
 ]
 
 { #category : #initialization }
-TPDebuggerExtension >> updatePresenter [
+TprDebuggerExtension >> updatePresenter [
 
 	debugger selectedContext ifNotNil: [
 		toolbarPane context:

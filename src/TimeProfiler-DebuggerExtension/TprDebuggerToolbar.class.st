@@ -1,5 +1,5 @@
 Class {
-	#name : #TPDebuggerToolbar,
+	#name : #TprDebuggerToolbar,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'startBlock',
@@ -7,17 +7,17 @@ Class {
 		'startButton',
 		'iterationsInput'
 	],
-	#category : #'TimeProfilerDebuggerXT-GUI'
+	#category : #'TimeProfiler-DebuggerExtension-Extension-UI'
 }
 
 { #category : #accessing }
-TPDebuggerToolbar >> context: aContextDescription [
+TprDebuggerToolbar >> context: aContextDescription [
 
 	contextLabel text: aContextDescription
 ]
 
 { #category : #layout }
-TPDebuggerToolbar >> defaultLayout [
+TprDebuggerToolbar >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		spacing: 5;
@@ -34,7 +34,7 @@ TPDebuggerToolbar >> defaultLayout [
 ]
 
 { #category : #initialization }
-TPDebuggerToolbar >> initializePresenters [
+TprDebuggerToolbar >> initializePresenters [
 
 	contextLabel := self newText beNotEditable.
 
@@ -52,13 +52,13 @@ TPDebuggerToolbar >> initializePresenters [
 ]
 
 { #category : #accessing }
-TPDebuggerToolbar >> iterations [
+TprDebuggerToolbar >> iterations [
 	
 	^ iterationsInput number
 ]
 
 { #category : #enumerating }
-TPDebuggerToolbar >> onStartDo: aBlock [
+TprDebuggerToolbar >> onStartDo: aBlock [
 
 	startButton action: aBlock
 ]

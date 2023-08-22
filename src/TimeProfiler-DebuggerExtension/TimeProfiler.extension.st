@@ -1,6 +1,6 @@
 Extension { #name : #TimeProfiler }
 
-{ #category : #'*TimeProfilerDebuggerXT' }
+{ #category : #'*TimeProfiler-DebuggerExtension' }
 TimeProfiler >> reset [
 
 	result := nil.
@@ -9,7 +9,7 @@ TimeProfiler >> reset [
 	rootMessageTally := nil
 ]
 
-{ #category : #'*TimeProfilerDebuggerXT' }
+{ #category : #'*TimeProfiler-DebuggerExtension' }
 TimeProfiler >> treeMorph: aMorph [
 
 	treeMorph := aMorph

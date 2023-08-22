@@ -1,5 +1,5 @@
 Class {
-	#name : #TimeProfilerPresenter,
+	#name : #TimeProfilerSpPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'profiler',
@@ -11,11 +11,11 @@ Class {
 		'blockCode',
 		'panel'
 	],
-	#category : #'TimeProfilerDebuggerXT-TimeProfilerGUI'
+	#category : #'TimeProfiler-DebuggerExtension-TimeProfiler-UI'
 }
 
 { #category : #accessing }
-TimeProfilerPresenter >> clear [
+TimeProfilerSpPresenter >> clear [
 
 	| originalProfiler |
 	
@@ -27,7 +27,7 @@ TimeProfilerPresenter >> clear [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> createBlockCodeComponent [
+TimeProfilerSpPresenter >> createBlockCodeComponent [
 
 	| blockCodePaneMorph |
 	blockCodePaneMorph := profilerMorph
@@ -42,7 +42,7 @@ TimeProfilerPresenter >> createBlockCodeComponent [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> createCodeComponent [
+TimeProfilerSpPresenter >> createCodeComponent [
 
 	|codePaneMorph|
 	codePaneMorph := profilerMorph
@@ -56,9 +56,9 @@ TimeProfilerPresenter >> createCodeComponent [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> createComponents [
+TimeProfilerSpPresenter >> createComponents [
 
-	profilerMorph := TimeProfilerMorph new model: profiler; yourself.
+	profilerMorph := TprThemedModelMorph new model: profiler; yourself.
 
 	self createTreeComponent.
 	self createSummaryComponent.
@@ -68,7 +68,7 @@ TimeProfilerPresenter >> createComponents [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> createReportComponent [
+TimeProfilerSpPresenter >> createReportComponent [
 
 	| fullReportMorph |
 	fullReportMorph := profilerMorph
@@ -81,7 +81,7 @@ TimeProfilerPresenter >> createReportComponent [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> createSummaryComponent [
+TimeProfilerSpPresenter >> createSummaryComponent [
 
 	summary := self specWrapperFor: (profilerMorph
 		                newTextEditorFor: profiler
@@ -91,7 +91,7 @@ TimeProfilerPresenter >> createSummaryComponent [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> createTreeComponent [
+TimeProfilerSpPresenter >> createTreeComponent [
 	| treeMorph|
 	treeMorph := profiler treeMorph
 			         buildContents;
@@ -101,7 +101,7 @@ TimeProfilerPresenter >> createTreeComponent [
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> packComponents [
+TimeProfilerSpPresenter >> packComponents [
 
 	| mainLayout panedLayout |
 	"Creates layouts"
@@ -129,7 +129,7 @@ TimeProfilerPresenter >> packComponents [
 ]
 
 { #category : #api }
-TimeProfilerPresenter >> profiler: aProfiler [
+TimeProfilerSpPresenter >> profiler: aProfiler [
 
 	profiler := aProfiler.
 	self createComponents.
@@ -137,13 +137,13 @@ TimeProfilerPresenter >> profiler: aProfiler [
 ]
 
 { #category : #api }
-TimeProfilerPresenter >> refresh [
+TimeProfilerSpPresenter >> refresh [
 
 	self profiler: profiler
 ]
 
 { #category : #'private - gui' }
-TimeProfilerPresenter >> specWrapperFor: aMorph [
+TimeProfilerSpPresenter >> specWrapperFor: aMorph [
 	
 	^ self newMorph morph: aMorph; yourself
 ]
