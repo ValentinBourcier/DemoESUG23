@@ -1,11 +1,11 @@
 Class {
-	#name : #TprExtensionInstaller,
+	#name : #ESUGDemo,
 	#superclass : #Object,
-	#category : #'TimeProfiler-DebuggerExtension-Installer'
+	#category : #'DemoESUG23-Demo'
 }
 
-{ #category : #adding }
-TprExtensionInstaller class >> addContextMethodRun [
+{ #category : #extension }
+ESUGDemo class >> addContextMethodRun [
 
 	self extensionClass compile: 'contextMethodRun: aContext
 
@@ -19,8 +19,8 @@ TprExtensionInstaller class >> addContextMethodRun [
 	self protocolOrganizer classify: #contextMethodRun: inProtocolNamed: 'context'.
 ]
 
-{ #category : #adding }
-TprExtensionInstaller class >> addContextMethodText [
+{ #category : #extension }
+ESUGDemo class >> addContextMethodText [
 
 	self extensionClass compile: 'contextMethodText: aContext
 
@@ -31,8 +31,8 @@ TprExtensionInstaller class >> addContextMethodText [
 	self protocolOrganizer classify: #contextMethodText: inProtocolNamed: 'context'.
 ]
 
-{ #category : #adding }
-TprExtensionInstaller class >> addContextProfiling [
+{ #category : #extension }
+ESUGDemo class >> addContextProfiling [
 
 	self addContextMethodRun.
 	self extensionClass compile: 'contextMethod: aContext runProfiler: aProfiler loops: aIterationNumber
@@ -44,8 +44,8 @@ TprExtensionInstaller class >> addContextProfiling [
 	self protocolOrganizer classify: #contextMethod:runProfiler:loops: inProtocolNamed: 'context'.
 ]
 
-{ #category : #installation }
-TprExtensionInstaller class >> createExtensionClass [
+{ #category : #extension }
+ESUGDemo class >> createExtensionClass [
 	
 	Smalltalk classInstaller make: [ :aBuilder |
 		aBuilder
@@ -57,24 +57,29 @@ TprExtensionInstaller class >> createExtensionClass [
 	
 ]
 
-{ #category : #accessing }
-TprExtensionInstaller class >> extensionClass [
+{ #category : #extension }
+ESUGDemo class >> extensionClass [
 
 	^ Smalltalk classNamed: 'TprDebuggerExtension'
 ]
 
-{ #category : #installation }
-TprExtensionInstaller class >> install [
+{ #category : #timeline }
+ESUGDemo class >> extensionTimeline [
 
-	<script: 'self install'>
-	
 	"Prerequisite steps"
 	self createExtensionClass.
 	self overrideToolName.
 	
+	"Activate the extension"
+	
 	"Initialization steps"
 	self overrideInitialization.
 	self overrideLayout.
+	
+	
+	"How to analyse the debugging context ?"
+	"Inspector ? No, Chest !"
+	
 	
 	"Bind the selection of a debugging context with the toolbar"
 	self addContextMethodText.
@@ -91,8 +96,8 @@ TprExtensionInstaller class >> install [
 
 ]
 
-{ #category : #overrides }
-TprExtensionInstaller class >> overrideConnectPresenters [
+{ #category : #extension }
+ESUGDemo class >> overrideConnectPresenters [
 
 	self extensionClass compile: 'connectPresenters
 		
@@ -107,8 +112,8 @@ TprExtensionInstaller class >> overrideConnectPresenters [
 	self protocolOrganizer classify: #connectPresenters inProtocolNamed: 'presenters'.
 ]
 
-{ #category : #overrides }
-TprExtensionInstaller class >> overrideInitialization [
+{ #category : #extension }
+ESUGDemo class >> overrideInitialization [
 
 	self extensionClass compile: 'initializePresenters
 
@@ -127,8 +132,8 @@ TprExtensionInstaller class >> overrideInitialization [
 
 ]
 
-{ #category : #overrides }
-TprExtensionInstaller class >> overrideLayout [
+{ #category : #extension }
+ESUGDemo class >> overrideLayout [
 
 	self extensionClass compile: 'debuggerLayout
 	
@@ -139,8 +144,8 @@ TprExtensionInstaller class >> overrideLayout [
 	'
 ]
 
-{ #category : #overrides }
-TprExtensionInstaller class >> overrideProfilerUpdate [
+{ #category : #extension }
+ESUGDemo class >> overrideProfilerUpdate [
 
 	self extensionClass compile: 'updatePresenter
 	
@@ -153,8 +158,8 @@ TprExtensionInstaller class >> overrideProfilerUpdate [
 	self protocolOrganizer classify: #updatePresenter inProtocolNamed: 'presenters'.
 ]
 
-{ #category : #overrides }
-TprExtensionInstaller class >> overrideToolName [
+{ #category : #extension }
+ESUGDemo class >> overrideToolName [
 
 	self extensionClass compile: 'debuggerExtensionToolName
 	
@@ -163,8 +168,8 @@ TprExtensionInstaller class >> overrideToolName [
 
 ]
 
-{ #category : #overrides }
-TprExtensionInstaller class >> overrideToolbarUpdate [
+{ #category : #extension }
+ESUGDemo class >> overrideToolbarUpdate [
 
 	self extensionClass compile: 'updatePresenter
 	
@@ -175,8 +180,33 @@ TprExtensionInstaller class >> overrideToolbarUpdate [
 	self protocolOrganizer classify: #updatePresenter inProtocolNamed: 'presenters'.
 ]
 
-{ #category : #accessing }
-TprExtensionInstaller class >> protocolOrganizer [
+{ #category : #extension }
+ESUGDemo class >> protocolOrganizer [
 
 	^ self extensionClass organization protocolOrganizer
+]
+
+{ #category : #extension }
+ESUGDemo class >> removeExtension [
+
+	Smalltalk removeClassNamed: 'TprDebuggerExtension'
+]
+
+{ #category : #timeline }
+ESUGDemo class >> timeline [
+	
+	"How the Pharo debugger looks like"
+	'ESUG23' crTrace.
+	
+	"What about adding performance statistics ?"
+	TimeProfiler spyOn: [ 'ESUG23' crTrace ].
+	
+	"No figures ?"
+	TimeProfiler spyOn: [ 10000 timesRepeat: [ 'ESUG23' crTrace ] ].
+	
+	"Disclaimer - prepared UI"
+	TprExtensionToolbar new open.
+	TimeProfilerSpPresenter new 
+		profiler: (TimeProfiler new withBlockCodePane: false; yourself);
+		open.
 ]
