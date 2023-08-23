@@ -14,18 +14,6 @@ Class {
 	#category : #'TimeProfiler-DebuggerExtension-TimeProfiler-UI'
 }
 
-{ #category : #accessing }
-TimeProfilerSpPresenter >> clear [
-
-	| originalProfiler |
-	
-	originalProfiler := profiler.
-	
-	"self profiler: TimeProfiler new
-		withBlockCodePane: false; 
-		yourself."
-]
-
 { #category : #'private - gui' }
 TimeProfilerSpPresenter >> createBlockCodeComponent [
 

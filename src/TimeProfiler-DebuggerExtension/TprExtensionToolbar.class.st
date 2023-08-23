@@ -1,5 +1,5 @@
 Class {
-	#name : #TprDebuggerToolbar,
+	#name : #TprExtensionToolbar,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'startBlock',
@@ -11,13 +11,13 @@ Class {
 }
 
 { #category : #accessing }
-TprDebuggerToolbar >> context: aContextDescription [
+TprExtensionToolbar >> context: aContextDescription [
 
 	contextLabel text: aContextDescription
 ]
 
 { #category : #layout }
-TprDebuggerToolbar >> defaultLayout [
+TprExtensionToolbar >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		spacing: 5;
@@ -34,7 +34,7 @@ TprDebuggerToolbar >> defaultLayout [
 ]
 
 { #category : #initialization }
-TprDebuggerToolbar >> initializePresenters [
+TprExtensionToolbar >> initializePresenters [
 
 	contextLabel := self newText beNotEditable.
 
@@ -52,13 +52,13 @@ TprDebuggerToolbar >> initializePresenters [
 ]
 
 { #category : #accessing }
-TprDebuggerToolbar >> iterations [
+TprExtensionToolbar >> iterations [
 	
 	^ iterationsInput number
 ]
 
 { #category : #enumerating }
-TprDebuggerToolbar >> onStartDo: aBlock [
+TprExtensionToolbar >> onStartDo: aBlock [
 
 	startButton action: aBlock
 ]
