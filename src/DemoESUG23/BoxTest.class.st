@@ -20,7 +20,6 @@ BoxTest >> testMultipleBoxes [
 		10 timesRepeat: [ 
 			b addElement: (random nextInteger: 10).
 		].
-		self haltIf: b = (Chest at: 'box').
 	].
 
 ]
