@@ -22,4 +22,5 @@ BoxTest >> testMultipleBoxes [
 		].
 	].
 
+	self assert: (boxes at: 5) elements equals: #(10 3 10 1 9 4 8 4 6 1) asOrderedCollection
 ]
