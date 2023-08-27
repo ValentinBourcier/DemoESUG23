@@ -10,8 +10,9 @@ Class {
 
 { #category : #comparing }
 Box >> = anObject [
-	
+
 	self == anObject ifTrue: [ ^ true ].
+	name = anObject name ifFalse: [ ^false ].
 	^ elements = anObject elements
 ]
 
@@ -33,6 +34,11 @@ Box >> initialize [
 	
 	name := ''.
 	elements := OrderedCollection new	
+]
+
+{ #category : #accessing }
+Box >> name [
+	^ name
 ]
 
 { #category : #adding }
